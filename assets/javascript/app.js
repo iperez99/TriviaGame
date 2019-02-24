@@ -1,16 +1,7 @@
 //JQuery event that references the <button> id "start"//
 $("#start").on("click", function () {
     // console.log("button press works!")
-    $("#start").remove(); //<--this removes the start button, this prevents the player from generating more questions//
-
-    //for loops that append the questions, and the choices with a radio button and the value that is equal to the choice//
-    for (var i = 0; i < questions.length; i++) {
-        $("#swrapper").append("<h2>" + questions[i].question + "</h2>");
-        for (var j = 0; j < questions[i].choices.length; j++) {
-            $("#swrapper").append("<input type= 'radio' name='question-" + i + " 'value'" + questions[i].choices[j] + "'>" + questions[i].choices[j])
-        }
-
-    }
+    game.start();
 })
 
 //declared a variable with all the questions and answers in an array//
@@ -52,3 +43,40 @@ var questions = [
         answer: "Needle"
     },
 ];
+
+//tracking stats//
+
+var game = {
+
+    correct: 0,
+    incorrect: 0,
+    counter: 90,
+    countdown: function () {
+        game.conter--;
+        $("#counter").html(game.counter);
+        if (game.counter <= 0) {
+            console.log("out of time")
+            game.done();
+        }
+
+    },
+
+    start: function () {
+        timer = setInterval(game.countdown, 1000);
+        $("#swrapper").prepend("<")
+        $("#start").remove(); //<--this removes the start button, this prevents the player from generating more questions//
+
+        //for loops that append the questions into an h2 tag, and the choices array with a radio button//
+        for (var i = 0; i < questions.length; i++) {
+            $("#swrapper").append("<h2>" + questions[i].question + "</h2>");
+            for (var j = 0; j < questions[i].choices.length; j++) {
+                $("#swrapper").append("<input type= 'radio' name='question-" + i + " 'value'" + questions[i].choices[j] + "'>" + questions[i].choices[j])
+            }
+
+        }
+
+
+    }
+
+
+}
