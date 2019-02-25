@@ -4,6 +4,9 @@ $("#start").on("click", function () {
     game.start();
 })
 
+$(document).on("click", "#end", function () {
+    game.finished();
+})
 //declared a variable with all the questions and answers in an array//
 
 var questions = [
@@ -41,7 +44,7 @@ var questions = [
         question: "What is the name of Arya Stark's sword?",
         choices: ["Wrait", "Gjallarhorn", "Thorn", "Needle"],
         answer: "Needle"
-    },
+    }
 ];
 
 //tracking stats//
@@ -50,12 +53,12 @@ var game = {
 
     correct: 0,
     incorrect: 0,
-    counter: 20,
+    counter: 60,
     //countdown timer method//
     countdown: function () {
         game.counter--;
         $("#counter").html(game.counter);
-        if (game.counter <= 0) {
+        if (game.counter === 0) {
             console.log("out of time")
             game.finished();
         }
@@ -65,24 +68,25 @@ var game = {
     start: function () {
         //sets the timer into html document//
         timer = setInterval(game.countdown, 1000);
-        $("#swrapper").prepend("<h2>Time left: <span id='counter'>60</span> Seconds</h2>");
+        $("#swrapper").prepend('<h2>Time left: <span id="counter">60</span> Seconds</h2>');
         $("#start").remove(); //<--this removes the start button, this prevents the player from generating more questions//
 
         //for loops that append the questions into an h2 tag, and the choices array with a radio button//
         for (var i = 0; i < questions.length; i++) {
             $("#swrapper").append("<h2>" + questions[i].question + "</h2>");
             for (var j = 0; j < questions[i].choices.length; j++) {
-                $("#swrapper").append("<input type= 'radio' name='question-" + i + " 'value'" + questions[i].choices[j] + "'>" + questions[i].choices[j])
+                $("#swrapper").append("<input type='radio' name='question-"+i+"' value='"+questions[i].choices[j]+"'>"+questions[i].choices[j]);
             }
 
         }
 
-
+        $("#swrapper").append("<br><br><button id='end'>Done</button>");
     },
     //checks for the correct answers in each question//
     finished: function () {
         $.each($('input[name="question-0"]:checked'), function () {
             if ($(this).val() == questions[0].answer) {
+                console.log(this);
                 game.correct++;
             }
             else {
@@ -92,6 +96,7 @@ var game = {
         });
         $.each($('input[name="question-1"]:checked'), function () {
             if ($(this).val() == questions[1].answer) {
+                console.log(this);
                 game.correct++;
             }
             else {
